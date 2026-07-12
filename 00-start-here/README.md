@@ -27,6 +27,21 @@ Academy = **produkcja kompetencji**. Nie duplikuj danych sąsiadów — wskazuj 
 - **resume-generator** — prezentacja doświadczenia (CV/ATS/aplikacje).
 - **personal-brand** — publikacja kompetencji (LinkedIn, artykuły, case studies).
 
+## Academy Learning Engine (start)
+Ten vault ma natywnego trenera kompetencji (Academy OS). Uruchom **`początek`** (skill
+[[academy-coach]]), aby przejść onboarding i wypełnić artefakty stanu w tym katalogu:
+- [[academy-state]] — główny wskaźnik stanu (komenda `status`; pole `preferred_role`),
+- [[assessment-baseline]] — **pierwszy** assessment (`assessment_version`); kolejne w `assessments/`,
+- [[learning-profile]] — profil i poziomy,
+- [[learning-preferences]] — preferencje nauki (styl, długość sesji, rytm),
+- [[current-goal]] — cel docelowy,
+- [[adaptive-roadmap]] — plan 90/180/365 (odrębny od `academy-state.md`),
+- [[checkpoint-history]] — dziennik checkpointów (append-only).
+
+Pętlę prowadzi [[academy-learning-loop]] (`skończyłem podcast`, `następny lab`, `następny moduł`),
+materiały podcastowe [[academy-podcasts]] (`podcast`).
+
 Co tu trafia:
 - drogowskazy do [[now]], [[roadmap]], [[open-loops]] i katalogów pipeline,
+- artefakty stanu Academy (powyżej), utrzymywane przez [[academy-coach]],
 - krótkie wyjaśnienie domyślnej domeny (`learning`).

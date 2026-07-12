@@ -9,4 +9,4 @@ default_classification: internal
 domains:
   - learning
   - shared-concept
-framework_version: 0.6.0
+framework_version: 0.7.0

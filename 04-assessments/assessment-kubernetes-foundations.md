@@ -8,6 +8,7 @@ notebooklm_source: false
 podcast_export: forbidden
 compliance_review: not_required
 source_of_truth: true
+assessment_version: 1
 created: 2026-07-12
 updated: 2026-07-12
 tags: [assessment, kubernetes]
