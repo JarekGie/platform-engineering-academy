@@ -13,12 +13,36 @@ updated: 2026-07-12
 tags: [academy, profile]
 ---
 
-## Stan pusty
+## Profil doświadczenia
 
-Profil doświadczenia jeszcze nie wypełniony. Uruchom **`początek`** ([[academy-coach]]) —
-Etap 1–2 zada pytania pojedynczo i wypełni deklarowane poziomy per technologia
-(AWS, Terraform, Kubernetes, GitOps, Vault, CrowdStrike, GuardDuty, Security Hub, FinOps,
-LLM, RAG, AI Security, Go, Python i inne).
+Wynik Etapu 1–2 onboardingu ([[academy-coach]]). Deklarowany poziom per technologia.
+
+| Technologia | Poziom | Lata (jeśli produkcja) |
+| --- | --- | --- |
+| AWS | Robiłem na produkcji | 5+ lat |
+| Terraform | Robiłem na produkcji | 3–5 lat |
+| FinOps | Robiłem na produkcji | ~1 rok |
+| Terragrunt | Robiłem laby | podstawy |
+| Ansible | Robiłem laby | podstawy |
+| Docker | Robiłem laby | — |
+| Kubernetes | Robiłem laby | — |
+| EKS | Robiłem laby | — |
+| ECS | Robiłem laby | — |
+| GKE | Robiłem laby | — |
+| Helm | Robiłem laby | — |
+| LLM | Robiłem laby | — |
+| ArgoCD | Nie znam | — |
+| Flux | Nie znam | — |
+| Backstage | Nie znam | — |
+| Crossplane | Nie znam | — |
+| Vault | Nie znam | — |
+| CrowdStrike | Nie znam | — |
+| GuardDuty | Nie znam | — |
+| Security Hub | Nie znam | — |
+| RAG | Nie znam | — |
+| AI Security | Nie znam | — |
+| Python | Nie znam | — |
+| Go | Nie znam | — |
 
 ## Powiązane
 [[assessment-baseline]], [[current-goal]], [[academy-state]].

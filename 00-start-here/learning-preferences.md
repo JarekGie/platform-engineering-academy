@@ -20,18 +20,21 @@ podczas onboardingu (`początek`) i aktualizuje przy `checkpoint`/`reassessment`
 
 | Pole | Wartość | Dozwolone / przykład |
 | --- | --- | --- |
-| preferred_learning_style | _pusty_ | podcast-first / hands-on-first / reading-first / mixed |
-| preferred_session_length | _pusty_ | 25 min / 45 min / 90 min |
-| podcast_enabled | _pusty_ | true / false |
-| notebooklm_enabled | _pusty_ | true / false |
-| checkpoint_frequency | _pusty_ | co tydzień / co 2 tygodnie / co miesiąc |
-| assessment_frequency | _pusty_ | co miesiąc / co kwartał |
+| preferred_learning_style | podcast-first | podcast-first / hands-on-first / reading-first / mixed |
+| preferred_session_length | 25 min | 25 min / 45 min / 90 min |
+| podcast_enabled | true | true / false |
+| notebooklm_enabled | true | true / false |
+| checkpoint_frequency | co tydzień | co tydzień / co 2 tygodnie / co miesiąc |
+| assessment_frequency | co miesiąc | co miesiąc / co kwartał |
 
 ## Jak wpływają na Academy
 
-- `preferred_learning_style` → [[academy-learning-loop]] proponuje kolejny krok zgodny ze stylem.
-- `podcast_enabled` / `notebooklm_enabled` → warunkują [[academy-podcasts]] (musi być też `notebooklm: true` w manifeście).
-- `checkpoint_frequency` / `assessment_frequency` → rytm przypominania o `checkpoint` i `reassessment`.
+- `preferred_learning_style` = podcast-first → [[academy-learning-loop]] i [[academy-podcasts]]
+  zaczynają krok od materiału podcastowego (NotebookLM), potem teoria i lab.
+- `preferred_session_length` = 25 min → kroki cięte na krótkie porcje (jeden podcast + jeden mały ruch).
+- `podcast_enabled` / `notebooklm_enabled` = true → [[academy-podcasts]] aktywny (manifest ma `notebooklm: true`).
+- `checkpoint_frequency` = co tydzień → cotygodniowe przypomnienie o `checkpoint`.
+- `assessment_frequency` = co miesiąc → miesięczny `reassessment` z porównaniem do [[assessment-baseline]].
 
 ## Powiązane
 [[academy-state]], [[current-goal]], [[academy-coach]].

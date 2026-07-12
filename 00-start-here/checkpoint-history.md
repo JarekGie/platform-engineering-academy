@@ -31,7 +31,13 @@ to historia ewolucji kompetencji.
 
 ## Wpisy
 
-_Brak — pierwszy checkpoint dopisze [[academy-coach]] po uruchomieniu `checkpoint`._
+### 2026-07-12 — onboarding (baseline)
+- assessment_version: 1
+- roadmap_version: 1
+- active_pillar / active_module: Kubernetes / kubernetes
+- zmiany od ostatniego: pierwszy pomiar. Kalibracja — Cloud 2, FinOps 2, Kubernetes 1,
+  GitOps 1, AI 1, Platform 0, Security 0. Cel: Senior Platform Engineer. Styl: podcast-first, 25 min.
+- next_action: wejść w moduł `02-modules/kubernetes/` (teoria workload controllers), podcast-first.
 
 ## Powiązane
 [[academy-state]], [[assessment-baseline]], [[adaptive-roadmap]].

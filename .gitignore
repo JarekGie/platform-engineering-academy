@@ -4,3 +4,6 @@
 
 # Lokalna konfiguracja i artefakty pluginów Obsidiana
 .obsidian/
+
+# Audio pochodne z NotebookLM (regenerowalne, nie source of truth)
+*.mp3
