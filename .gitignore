@@ -1,0 +1,6 @@
+# Lokalne artefakty systemowe
+.DS_Store
+**/.DS_Store
+
+# Lokalna konfiguracja i artefakty pluginów Obsidiana
+.obsidian/
