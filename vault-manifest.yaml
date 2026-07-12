@@ -1,0 +1,12 @@
+vault_name: platform-engineering-academy
+vault_type: academy
+owner: "Jarek"
+created: 2026-07-12
+notebooklm: true
+podcast: true
+compliance_review: false
+default_classification: internal
+domains:
+  - learning
+  - shared-concept
+framework_version: 0.6.0
