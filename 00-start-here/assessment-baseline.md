@@ -8,33 +8,39 @@ notebooklm_source: false
 podcast_export: forbidden
 compliance_review: not_required
 source_of_truth: true
-assessment_version: 0
+assessment_version: 1
 created: 2026-07-12
 updated: 2026-07-12
 tags: [academy, assessment, baseline]
 ---
 
-## Stan pusty
+## Kontekst
 
-Assessment bazowy jeszcze nie wykonany. Uruchom **`początek`** ([[academy-coach]]), aby przeprowadzić
-adaptacyjny assessment i wypełnić kalibrację filarów.
+Wynik assessmentu bazowego wygenerowany przez [[academy-coach]] (Etap 3–4 onboardingu, 2026-07-12).
+Pomiar realny (nie deklarowany): pytania adaptacyjne w mocnych obszarach. Pole `assessment_version`
+podbijaj przy każdym `reassessment` (1 = pierwszy pomiar).
 
-`assessment_version` śledzi ewolucję assessmentu między checkpointami: `0` = przed onboardingiem,
-`1` = pierwszy assessment, kolejne podbicia przy każdym `reassessment`.
+## Kalibracja filarów (0–5)
 
-## Kalibracja filarów (0–5) — do wypełnienia
-
-| Filar | Poziom (0–5) |
-| --- | --- |
-| Cloud | _pusty_ |
-| Platform | _pusty_ |
-| Kubernetes | _pusty_ |
-| GitOps | _pusty_ |
-| Security | _pusty_ |
-| AI | _pusty_ |
-| FinOps | _pusty_ |
+| Filar | Poziom (0–5) | Uzasadnienie (dowód/obserwacja) |
+| --- | --- | --- |
+| Cloud (AWS/IaC) | 2 Mid | Terraform solidnie (state, backend S3, locking, moduły, env-per-katalog); koszty/rachunek ogarnięte. Luki: sieć multi-account (Transit Gateway), IAM dla workloadów (ECS task role), zarządzanie sekretami, security services. |
+| Platform (IDP) | 0 Beginner | Backstage, Crossplane — brak kontaktu. Terragrunt/Ansible tylko podstawy. |
+| Kubernetes | 1 Junior | Laby wprowadzające; fundament kruchy (nie zna różnicy Deployment vs StatefulSet). EKS/ECS/GKE tylko laby. |
+| GitOps | 1 Junior (low) | Tylko Helm na poziomie labów. ArgoCD, Flux — brak. |
+| Security | 0 Beginner | Vault, CrowdStrike, GuardDuty, Security Hub, AI Security — brak. SG vs NACL: rozumienie częściowe. |
+| AI | 1 Junior | LLM na poziomie labów. RAG, AI Security — brak. |
+| FinOps | 2 Mid | Najmocniejszy realny obszar: Cost Explorer (grupowanie po serwisie/tagach), Savings Plans/RI, Spot, schedulery non-prod. ~1 rok produkcyjnie. |
 
 Skala: 0 Beginner · 1 Junior · 2 Mid · 3 Senior · 4 Advanced Senior · 5 Staff Track.
+
+## Największe luki
+
+Zależne od celu ([[current-goal]] — ustawiany w Etapie 5). Wstępnie, względem roli Platform Engineer:
+- **Kubernetes** — fundament (workload controllers, sieć, storage) do zbudowania od podstaw.
+- **GitOps** — ArgoCD/Flux od zera; naturalne przedłużenie Terraform + K8s.
+- **Cloud depth** — sieć multi-account, IAM dla workloadów, sekrety, security services.
+- **Security** — cały filar praktycznie od zera.
 
 ## Powiązane
 [[learning-profile]], [[current-goal]], [[adaptive-roadmap]], [[academy-state]].

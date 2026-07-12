@@ -13,25 +13,23 @@ updated: 2026-07-12
 tags: [academy, state, dashboard]
 ---
 
-## Stan Academy (stan pusty)
+## Stan Academy
 
 Główny wskaźnik stanu Academy — szybki dashboard (komenda `status` w [[academy-coach]]).
 **Nie miesza się z [[adaptive-roadmap]]:** roadmapa trzyma plan, ten plik trzyma bieżący wskaźnik.
 
-Onboarding jeszcze nie uruchomiony — uruchom **`początek`**, aby wypełnić poniższe pola.
-
 | Pole | Wartość |
 | --- | --- |
-| academy_version | _pusty_ |
-| assessment_version | _pusty_ |
-| current_goal | _pusty_ |
-| preferred_role | _pusty_ (np. Senior Platform Engineer / Security Platform Engineer / Staff Platform Engineer) |
-| active_pillar | _pusty_ |
-| active_module | _pusty_ |
-| current_focus | _pusty_ |
-| next_action | uruchom `początek` |
-| last_checkpoint | _pusty_ |
-| roadmap_version | _pusty_ |
+| academy_version | 1 |
+| assessment_version | 1 |
+| current_goal | Senior Platform Engineer |
+| preferred_role | Senior Platform Engineer |
+| active_pillar | Kubernetes |
+| active_module | kubernetes |
+| current_focus | Etap 90 dni — Fundament Kubernetes; lab klastra minikube/qemu2 domknięty (`ev-k8s-001` self-verified) |
+| next_action | odcinek 02 (Deployment vs StatefulSet vs DaemonSet) + uzupełnić `02-modules/kubernetes/theory.md` własnymi słowami |
+| last_checkpoint | 2026-07-12 (onboarding) |
+| roadmap_version | 1 |
 
 ## Powiązane
 [[adaptive-roadmap]], [[current-goal]], [[assessment-baseline]], [[checkpoint-history]],

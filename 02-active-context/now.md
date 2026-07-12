@@ -19,18 +19,21 @@ jeśli korzystasz z tych skilli. Trzymaj jedną domenę wrażliwości na sesję.
 
 ## Aktywny moduł / krok pipeline
 
-Nad czym teraz pracujesz: który moduł (`02-modules/<temat>/`) i który krok pipeline
-(Roadmap / Theory / Lab / Assessment / Homelab / Evidence / Real Project).
+Moduł `02-modules/kubernetes/`, krok pipeline: **Theory** (po podcaście 01 „architektura
+klastra"). Cel: Kubernetes 1 → 2 w etapie 90 dni ([[adaptive-roadmap]]).
 
 ## Aktywna domena (jedna sesja = jedna domena)
 
-Domyślnie: `learning`. Jedna sesja LLM = jedna domena wrażliwości. Materiał niewrażliwy
+`learning`. Jedna sesja LLM = jedna domena wrażliwości. Materiał niewrażliwy
 (`shared-concept`) może współwystępować z `learning` (patrz [[DOMAIN_ISOLATION_CONTRACT]]).
 
 ## Bieżący kontekst
 
-Który lab jest w toku, jaki assessment jest zaplanowany, jaki dowód (evidence) ma powstać.
+Gotowy pakiet do nauki K8s 01: audio (NotebookLM), quiz i flashcards
+(`90-reference/notebooklm/generated-podcasts/kubernetes/kubernetes-01-architektura-klastra/`).
+Zaplanowany dowód: `ev-k8s-001` po labie kind/minikube.
 
 ## Następny krok
 
-Konkretna, najbliższa czynność do wykonania.
+Odsłuchać podcast K8s 01, przerobić flashcards + quiz, wnioski własnymi słowami zapisać do
+`02-modules/kubernetes/theory.md`. Potem odcinek 02 (Deployment vs StatefulSet).
