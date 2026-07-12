@@ -41,9 +41,22 @@ Jedna sesja = jeden branch `<operator>/<YYYY-MM-DD>`.
    glab mr create --source-branch <operator>/<YYYY-MM-DD> --target-branch main \
      --title "<tytuł>" --description "<opis>"
    ```
+   (Dla remote GitHub użyj `gh pr create --base main --head <operator>/<YYYY-MM-DD> ...`.)
    Tytuł i opis (Podsumowanie / Zmiany / Domena / Ryzyko) gotowe do wklejenia.
+9. **Pre-generacja podcastu na następny dzień (tylko `vault_type: academy`).** Po commit/push:
+   - odczytaj `00-start-here/academy-state.md` → `next_action` / `active_module` i [[adaptive-roadmap]],
+     żeby ustalić NASTĘPNY temat nauki (np. kolejny odcinek modułu);
+   - deleguj do [[academy-podcasts]]: zbuduj materiały (source-pack, brief, glossary, questions)
+     i uruchom generację **audio w tle** (background agent), aby było gotowe na następny `start-day`;
+   - respektuj security hard gate academy-podcasts (tylko źródła publiczne/dopuszczone, nigdy
+     `allowed_internal_only`/`forbidden`/`restricted`);
+   - quiz i flashcards NIE tutaj — powstają w [[academy-learning-loop]] po odsłuchu;
+   - materiały pre-generowane pozostają niezacommitowane; zacommituje je end-day następnej sesji.
+   Cel: audio (10–20 min generacji) startuje na koniec dnia i jest gotowe rano — szybszy start nauki.
 
 ## Czego skill NIE robi
 - nie używa `git add -A` ani `git add .` (tylko jawne ścieżki);
 - nie commituje notatek `restricted`/`confidential` poza vault (zostają w vaultcie);
-- nie tworzy MR automatycznie — wypisuje gotową komendę dla operatora.
+- nie tworzy MR automatycznie — wypisuje gotową komendę dla operatora;
+- nie pre-generuje podcastu poza vaultami `academy` ani gdy brak jednoznacznego następnego tematu
+  (wtedy pomija krok 9 i zgłasza to operatorowi).
