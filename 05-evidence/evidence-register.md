@@ -36,6 +36,13 @@ do `evidence_id`.
 | --- | --- | --- | --- | --- | --- |
 | ev-k8s-001 | Obsługa klastra Kubernetes | kubernetes | assessment-kubernetes-foundations | unverified | _uzupełnij_ |
 | ev-gitops-001 | GitOps / Continuous Delivery | kubernetes | lab-gitops-argocd | unverified | _uzupełnij_ |
+| ev-csec-001 | Baseline posture (GuardDuty + Security Hub) | security-platform/cloud-security | lab-csec-guardduty-securityhub | unverified | _uzupełnij_ |
+| ev-csec-002 | Guardrail organizacyjny (SCP deny-region) | security-platform/cloud-security | lab-csec-scp-deny-region | unverified | _uzupełnij_ |
+| ev-iam-001 | Least privilege + wymuszenie MFA | security-platform/identity-and-access | lab-iam-least-privilege-mfa | unverified | _uzupełnij_ |
+| ev-iam-002 | Audytowalny dostęp awaryjny (break-glass) | security-platform/identity-and-access | lab-iam-break-glass | unverified | _uzupełnij_ |
+| ev-secr-001 | Dynamic secrets + rotacja z TTL (Vault/OpenBao) | security-platform/secrets-management | lab-secr-dynamic-db-rotation | unverified | _uzupełnij_ |
+| ev-gov-001 | Control-as-code (Config rules + raport) | security-platform/security-governance | lab-gov-config-rules | unverified | _uzupełnij_ |
+| ev-gov-002 | Control mapping: wymaganie → kontrola → dowód | security-platform/security-governance | lab-gov-control-mapping | unverified | _uzupełnij_ |
 
 ## Federacja (Academy → Career OS)
 
