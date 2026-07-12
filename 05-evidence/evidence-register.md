@@ -34,7 +34,7 @@ do `evidence_id`.
 
 | evidence_id | skill | module | lab | verification_status | source_ref |
 | --- | --- | --- | --- | --- | --- |
-| ev-k8s-001 | Obsługa klastra Kubernetes | kubernetes | assessment-kubernetes-foundations | unverified | _uzupełnij_ |
+| ev-k8s-001 | Obsługa klastra Kubernetes | kubernetes | lab-minikube-qemu-klaster | self-verified | `03-labs/lab-minikube-qemu-klaster.md` (minikube status + kubectl get nodes, 2026-07-12) |
 | ev-gitops-001 | GitOps / Continuous Delivery | kubernetes | lab-gitops-argocd | unverified | _uzupełnij_ |
 | ev-csec-001 | Baseline posture (GuardDuty + Security Hub) | security-platform/cloud-security | lab-csec-guardduty-securityhub | unverified | _uzupełnij_ |
 | ev-csec-002 | Guardrail organizacyjny (SCP deny-region) | security-platform/cloud-security | lab-csec-scp-deny-region | unverified | _uzupełnij_ |

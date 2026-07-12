@@ -27,6 +27,8 @@ Nie usuwaj wpisów. Jeden wpis = jedna sesja = jedna domena.
   - Kompletny odcinek podcastu **Kubernetes 01 — architektura klastra** ([[academy-podcasts]]):
     source-pack (3 publiczne źródła), brief, glossary, questions, feedback + wygenerowane w
     NotebookLM: Audio Overview (PL), quiz (10 pytań), flashcards.
+  - **Lab klastra** [[lab-minikube-qemu-klaster]] (minikube + qemu2, sieć builtin) → pierwszy
+    dowód **`ev-k8s-001` self-verified** (węzeł Ready). Pętla K8s 01 domknięta pipeline'em.
 - Otwarte:
   - Uzupełnić `02-modules/kubernetes/theory.md` własnymi słowami po odsłuchu.
   - Odcinek 02: workload controllers (Deployment vs StatefulSet) — luka z assessmentu.

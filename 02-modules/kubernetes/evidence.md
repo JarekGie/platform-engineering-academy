@@ -19,7 +19,7 @@ Jakie dowody kompetencji musi wyprodukować ten moduł (rejestrowane w [[evidenc
 
 | evidence_id | Kompetencja | Źródło (lab / assessment / homelab) | verification_status |
 | --- | --- | --- | --- |
-| ev-k8s-001 | Uruchomienie i obsługa klastra | [[03-labs]] / [[07-homelab]] | unverified |
+| ev-k8s-001 | Uruchomienie i obsługa klastra | [[lab-minikube-qemu-klaster]] | self-verified |
 | ev-gitops-001 | Wdrożenie GitOps (ArgoCD) | [[lab-gitops-argocd]] | unverified |
 
 ## Federacja z Career OS
