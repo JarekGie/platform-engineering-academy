@@ -20,8 +20,10 @@ znajdują się w [[03-labs]].
 
 | Lab | Cel | Dowód (evidence_id) | Status |
 | --- | --- | --- | --- |
+| [[lab-minikube-qemu-klaster]] | Postawienie klastra (minikube/qemu2) + `kubectl get nodes` | ev-k8s-001 | ✅ done (self-verified) |
 | [[lab-gitops-argocd]] | Wdrożenie GitOps (ArgoCD) na klaster | ev-gitops-001 | planowany |
-| _uzupełnij_ | | | |
+
+Kolejne laby wg [[companion-plan]] (per moduł kursu).
 
 ## Powiązane
 

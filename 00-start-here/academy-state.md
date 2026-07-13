@@ -26,8 +26,8 @@ Główny wskaźnik stanu Academy — szybki dashboard (komenda `status` w [[acad
 | preferred_role | Senior Platform Engineer |
 | active_pillar | Kubernetes |
 | active_module | kubernetes |
-| current_focus | Etap 90 dni — Fundament Kubernetes; lab klastra minikube/qemu2 domknięty (`ev-k8s-001` self-verified) |
-| next_action | odcinek 02 (Deployment vs StatefulSet vs DaemonSet) + uzupełnić `02-modules/kubernetes/theory.md` własnymi słowami |
+| current_focus | Kubernetes jako companion kursu kubernetespopolsku (kolejność kursu); ukończone: M1 architektura (`ev-k8s-001`). Plan: [[companion-plan]] |
+| next_action | odcinek 02 = **Pod** wygenerowany (audio w toku) → odsłuchać + lekcje/lab kursu M2 → lab Pod na klastrze; potem odcinek M3 (ReplicaSet/skalowanie) |
 | last_checkpoint | 2026-07-12 (onboarding) |
 | roadmap_version | 1 |
 
