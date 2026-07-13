@@ -38,3 +38,23 @@ Nie usuwaj wpisów. Jeden wpis = jedna sesja = jedna domena.
   [[now]], [[vault-zastosowania-i-mozliwosci]], odcinek `generated-podcasts/kubernetes/kubernetes-01-architektura-klastra/`.
 - Uwaga: mp3 podcastu (61 MB) świadomie w `.gitignore` — artefakt pochodny, regenerowalny z NotebookLM.
 - Branch / commit: `jgolab/2026-07-12` / `feat(learning): onboarding Academy + podcast K8s 01`
+
+### 2026-07-13 — jgolab — domena: learning
+
+- Zrobione:
+  - Przestawienie ścieżki Kubernetes na **companion do kursu kubernetespopolsku** (kolejność
+    kursu): [[companion-plan]] mapuje Fundamenty M1–M10 + PRO M1–M13 na odcinki/laby Academy.
+    Granica licencyjna zapisana: tylko publiczny spis tematów, treść kursu poza NotebookLM.
+  - Test **kroku 9 [[end-day]]** (pre-generacja podcastu): wygenerowany bonusowy odcinek
+    `kubernetes-02-workload-controllers` (Deployment/StatefulSet/DaemonSet, audio PL) — do przeslotowania.
+  - Odcinek **02 = Pod** (Fundamenty M2): source-pack (6 publicznych źródeł, w tym PL „Pod"),
+    brief, glossary, questions, feedback + audio PL. Sam podcast (quiz/flashcards w learning-loop).
+  - Aktualizacje modułu: [[resources]] (kurs jako źródło), [[labs]] (lab klastra done), [[academy-state]].
+- Otwarte:
+  - Przeslotować `kubernetes-02-workload-controllers` przy Deployment (F M8) / StatefulSet (PRO M5).
+  - Odsłuchać odc. 02 Pod → kurs M2 → lab Pod na klastrze → quiz/flashcards.
+  - Następny odcinek: M3 ReplicaSet/skalowanie (pre-generacja krok 9).
+- Dotknięte notatki: [[companion-plan]], [[resources]], [[labs]], [[academy-state]],
+  odcinki `generated-podcasts/kubernetes/kubernetes-02-pod/` i `kubernetes-02-workload-controllers/`.
+- Uwaga: pliki mp3 (~44 MB + ~37 MB) w `.gitignore` — regenerowalne z NotebookLM.
+- Branch / commit: `jgolab/2026-07-13` / `feat(learning): companion kursu K8s + odcinek 02 Pod`
