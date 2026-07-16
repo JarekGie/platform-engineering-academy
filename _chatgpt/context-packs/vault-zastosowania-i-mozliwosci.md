@@ -9,8 +9,8 @@ podcast_export: forbidden
 compliance_review: not_required
 source_of_truth: false
 created: 2026-07-12
-updated: 2026-07-12
-tags: [chatgpt, context-pack, shared-concept, vault, framework]
+updated: 2026-07-15
+tags: [chatgpt, context-pack, shared-concept, vault, framework, code-review, iac, repo-strategy]
 ---
 
 Paczka kontekstu dla ChatGPT. Buduje ją [[context-pack]] wyłącznie z treści dopuszczonej
@@ -30,6 +30,14 @@ i co potrafi**, tak aby mógł: (a) wyjaśniać jego działanie, (b) proponować
 i usprawnienia, (c) pomagać planować naukę i treści — bez dostępu do wnętrza vaulta i bez
 naruszania granic ekspozycji.
 
+**Aktualizacja 2026-07-15 — nowy zakres.** Operator chce, żeby vault (jako **publiczne repo /
+wizytówka** dokumentująca jego wiedzę) miał **miejsce na kod**: Terraform, Terragrunt, Ansible,
+ewentualnie Python i Go, a na pewno CI/CD. W tym procesie AI ma pełnić rolę **senior code
+reviewera**: dawać konstruktywny feedback i oceniać poziom pracy jak doświadczony senior.
+Ta paczka zawiera więc dodatkowo: (d) **kontrakt review** (jak oceniać kod i seniority),
+(e) **decyzję architektoniczną** — czy IaC pod laba trzymać w tym vaultcie (monorepo),
+czy w osobnym repo, z rzetelnymi argumentami za i przeciw dla obu wariantów.
+
 ## Domena (jedna paczka = jedna domena)
 
 `shared-concept`
@@ -45,6 +53,8 @@ naruszania granic ekspozycji.
 | [[now]] | `allowed_internal_only` | POMINIĘTE — narzędzie zewnętrzne |
 | [[roadmap]] | `allowed_internal_only` | POMINIĘTE — narzędzie zewnętrzne |
 | [[theory]] (moduł kubernetes) | `allowed_internal_only` | POMINIĘTE — narzędzie zewnętrzne |
+| Wymóg operatora (2026-07-15) o kodzie/repo | wejście operatora, niewrażliwe | włączone — cytat intencji, bez danych wrażliwych |
+| Fakt strukturalny: brak kodu/IaC w repo (stan 2026-07-15) | metadana strukturalna | włączone — laby i homelab są dziś tylko w markdownie |
 
 Do paczki nie weszło żadne ciało notatki `allowed`/`allowed_anonymized` — na tym etapie
 vault zawiera treści szablonowe `allowed_internal_only`. Poniższy opis to oryginalna
@@ -125,17 +135,144 @@ Vault ma lokalne skille w `.claude/skills/` (egzekwowane jako kontrakty):
 - Wynik z narzędzia zewnętrznego wraca do vaulta jako notatka zgodna z kontraktem; surowy
   wynik nie jest źródłem prawdy — `source_of_truth` zostaje w vaultcie.
 
+## Nowy zakres: kod w portfolio
+
+### Czego chce operator
+Vault jest **publicznym repo** i ma być **wizytówką dokumentującą wiedzę**. Do dziś (2026-07-15)
+zawiera wyłącznie notatki markdown — laby (`03-labs/`), homelab (`07-homelab/`) i moduły
+(`02-modules/`) są **opisane słownie, ale nie zawierają wykonywalnego kodu ani IaC**. Operator
+chce dołożyć miejsce na realny kod:
+- **Terraform + Terragrunt** — IaC i warstwa DRY/multi-env nad Terraformem;
+- **Ansible** — konfiguracja/provisioning;
+- **Python i Go** (opcjonalnie) — narzędzia, automatyzacje, drobne serwisy;
+- **CI/CD** — na pewno (pipeline dla powyższego).
+
+Rola AI w tym procesie: **senior code reviewer** — konstruktywny feedback i ocena poziomu pracy.
+
+### Napięcie do rozstrzygnięcia najpierw: „publiczne repo" vs `classification: internal`
+To trzeba wyjaśnić, zanim wleci kod. Manifest ma `default_classification: internal`, a notatki
+operacyjne (`now`, `roadmap`, moduły) są `allowed_internal_only`. Jeśli repo jest **naprawdę
+publiczne**, to `internal` i `allowed_internal_only` **przestają być realną kontrolą** — treść
+jest już czytelna dla całego świata (ludzie, crawlery, trening modeli). Bramka `llm_exposure`
+chroni tylko przed *ręcznym karmieniem* zewnętrznego LLM-a; nie cofa faktu publikacji w git.
+Dwa czyste wyjścia (do wyboru przez operatora, nie zakładam za niego):
+- **A. Repo publiczne = tylko treść public-safe.** Zreklasyfikować to, co ma być widoczne, na
+  `public`/`shared-concept`, a `internal` trzymać w osobnym, prywatnym repo/branchu.
+- **B. Split repo.** Publiczny „showcase vault" (portfolio) + prywatny „working vault" (surowa
+  praca `internal`). Wizytówka linkuje do dowodów, nie odwrotnie.
+Rekomendacja senior: **B** jest czystsza dla wizytówki i eliminuje ryzyko wycieku `internal`
+przez przypadkową publikację. To warunek wstępny dla całej reszty.
+
+## Decyzja architektoniczna: kod w vaultcie (monorepo) vs osobne repo
+
+Pytanie operatora: *czy IaC pod laba ma być w tym vaultcie, czy w osobnym repo?* Poniżej
+uczciwe „za i przeciw" dla obu wariantów, potem rekomendacja.
+
+### Wariant 1 — monorepo (wszystko w vaultcie: docs + IaC + kod + CI/CD)
+**Za:**
+- Jedno źródło prawdy: notatka teorii, lab i **dowód** (`05-evidence/`) leżą obok kodu, który
+  je potwierdza — mocne dla portfolio (recenzent widzi opis i implementację w jednym miejscu).
+- Jeden clone, jedna historia, jeden config CI — mniej narzutu dla solowego uczącego się.
+- Graf Obsidiana i `[[wiki-links]]` spinają notatki z kodem; pipeline Theory→Lab→Evidence
+  zostaje spójny w jednym commicie/PR.
+- Brak problemu dryfu „docs w jednym repo opisują kod w innym".
+
+**Przeciw:**
+- Vault Obsidiana ≠ repo software'owe. `.obsidian/`, markdown, `terraform state`/CI w jednym
+  drzewie to szum. Kolizja narzędzi: `terraform fmt`/`tflint`/`checkov`, lintery Go/Python,
+  pre-commit, dependabot vs. repo dokumentacyjne. CODEOWNERS i branch protection mają inną
+  semantykę dla docs i dla kodu.
+- CI musi być **path-filtered** (odpalaj `terraform plan` tylko przy zmianie `**.tf`), inaczej
+  pełny pipeline chodzi przy commitach czysto-dokumentacyjnych. Wykonalne, ale więcej configu.
+- Recenzent/rekruter klonujący „wizytówkę" dostaje wielkie mieszane drzewo; kod **nie czyta się
+  jak samodzielny, uruchamialny projekt** — a to jest waluta, którą oceniają rekruterzy.
+- Wyższe ryzyko wycieku: `*.tfstate`, `*.tfvars`, artefakty — łatwiej przypadkiem wpuścić do
+  publicznego repo, gdy `.gitignore` jest „dokumentacyjny", nie „terraformowy".
+- Blast radius: rewrite historii, żeby usunąć wyciekły sekret z kodu, przepisuje też historię docs.
+- Stan Terraforma i duże artefakty **i tak nie należą** do vaulta wiedzy.
+
+### Wariant 2 — osobne repo (jedno lub kilka) na kod/IaC; vault = docs + index
+**Za:**
+- Każdy lab/projekt to **samodzielny, uruchamialny artefakt**: własny README, własny CI
+  (fmt/validate/tflint/checkov/plan), badge, release. Dokładnie to, co recenzent chce zobaczyć:
+  „oto repo, które klonuję i robię `terraform plan`".
+- Izolacja narzędzi: Terraform/Ansible/Go/Python dostają właściwe linterowanie, `.gitignore`,
+  pre-commit i dependabot bez zaśmiecania vaulta.
+- Właściwy model wrażliwości per typ repo (repo kodu ma inne ryzyka niż repo notatek).
+- Vault zostaje czystym indeksem wiedzy/portfolio, który **linkuje** do repo kodu; dowód
+  (`05-evidence/`) wskazuje URL repo **+ przypięty commit SHA** (niezmienny wskaźnik) — bardzo
+  mocny wzorzec evidence.
+
+**Przeciw:**
+- Dryf: docs w vaultcie opisujące kod w innym repo się starzeją. Wymaga dyscypliny (linkuj po
+  SHA, nie tylko po nazwie repo).
+- Więcej narzutu dla solisty: N repo, N configów CI, N zestawów branch protection, context-switch.
+- Słabsza narracja „jedno miejsce pokazuje wszystko" — recenzent musi klikać linki. Łagodzi to
+  dobra strona-indeks (portfolio) w vaultcie.
+- Pipeline nauki traci ciasne sprzężenie: kod laba nie jest w tym samym PR co teoria i dowód.
+
+### Rekomendacja senior
+**Dziel po naturze artefaktu, nie dogmatycznie:**
+1. **Vault** = wiedza + indeks portfolio + **krótkie, ilustracyjne snippety** wklejone w notatki
+   (nie mają się uruchamiać samodzielnie). Zostaje czystym repo Obsidiana. **Nie** wrzucaj tu
+   `terraform state`, realnych modułów IaC ani kodu odpalanego przez CI.
+2. **Kod, który ma być uruchamiany i pokazywany** → **osobne repo per spójny projekt**
+   (np. `homelab-k8s`, `aws-security-baseline`), każde z własnym CI. Nie repo-per-moduł —
+   grupuj po projekcie, żeby solista nie utonął w kilkunastu repo.
+3. Notatki `05-evidence/` linkują do repo **+ przypięty SHA**. CI vaulta zostaje minimalne
+   (markdownlint, link-check, walidacja frontmattera); ciężki CI (plan/lint/security) żyje w repo kodu.
+
+**Dlaczego tak:** portfolia ocenia się po *uruchamialnych, dobrze zainżynierowanych repo*, a vault
+wiedzy po *przejrzystości i strukturze*. Wciśnięcie obu w jedno drzewo pogarsza każde z nich.
+Jeśli operator mimo to chce jedno miejsce — dopuszczalny monorepo z twardym rozdziałem
+`/docs` (vault) i `/labs/<projekt>/` (IaC), path-filtered CI oraz osobnym `.gitignore`/pre-commit
+po stronie kodu. Ale dla **publicznej wizytówki** wariant „osobne repo" wygrywa, bo standalone
+repo to język, który rekruterzy czytają wprost.
+
+## Kontrakt review: AI jako senior reviewer
+
+Gdy operator pokazuje kod, AI recenzuje jak doświadczony senior: **konkretnie, z uzasadnieniem,
+bez owijania** — ale konstruktywnie (co i *dlaczego* poprawić, oraz jak). Nie chwali na wyrost;
+nie zmyśla problemów. Osobno **feedback** (co poprawić) i osobno **ocena poziomu** (seniority).
+
+### Wymiary oceny (rubryka)
+1. **Poprawność / czy działa** — `validate`/`plan` czyste, brak błędów, robi to co deklaruje.
+2. **Struktura i modularność** — granice modułów, DRY (Terragrunt zamiast copy-paste środowisk).
+3. **Higiena stanu i sekretów** — remote state z lockiem; **żadnego** `state`/`tfvars`/sekretów
+   w repo; brak plaintext credów.
+4. **Bezpieczeństwo** — least-privilege IAM, `checkov`/`tfsec`, szyfrowanie, brak przypadkowej
+   ekspozycji publicznej.
+5. **Idempotencja i powtarzalność** — Ansible idempotentny; przypięte wersje providerów/modułów.
+6. **Czytelność** — nazewnictwo, spójny styl, komentarze o gęstości jak w otoczeniu, nie „co robi
+   kod" tylko „dlaczego".
+7. **Testy** — `terraform validate`+`tflint`, `molecule` (Ansible), testy Go/Python; opcjonalnie terratest.
+8. **CI/CD** — fmt→validate→lint→security-scan→plan na PR; **OIDC do chmury zamiast długoterminowych kluczy**.
+9. **Dokumentacja** — README: wymagania, jak uruchomić, **jak posprzątać (teardown)**, koszt.
+
+### Skala poziomu (jak nazwać seniority)
+- **Junior** — działa, ale copy-paste, hardcode, brak CI, ryzyko sekretów.
+- **Mid** — moduły, remote state, podstawowy CI, trochę lintowania.
+- **Senior** — DRY (Terragrunt), least-priv IAM, security-scan w CI, OIDC, przypięte wersje, testy,
+  README z teardownem, świadomość kosztu, ADR na kompromisy.
+- **Staff/Principal** — wzorce wielokrotnego użytku, policy-as-code (OPA/Sentinel), promocja
+  multi-env, drift detection, DR, świadomie udokumentowane trade-offy.
+
+Feedback zawsze wskazuje **następny poziom**: co konkretnie dowieźć, żeby wejść wyżej.
+
 ## Pytania do ChatGPT
 
-1. Na podstawie powyższego opisu — zaproponuj konkretny, tygodniowy rytm pracy z tym
-   vaultem (co robić w start-day / w trakcie / w end-day), tak aby pipeline nauki
-   Roadmap→…→Evidence realnie się domykał.
-2. Jakie typy notatek/treści warto dodać do modułu, żeby dowód kompetencji (`evidence_id`)
-   był mocny i weryfikowalny przez rekrutera lub audytora?
-3. Wskaż słabe punkty i ryzyka tego modelu pracy z AI (bramka `llm_exposure`, izolacja
-   domen) oraz co można usprawnić bez osłabiania bezpieczeństwa danych.
-4. Zaproponuj, jak wykorzystać ten vault do budowy marki eksperckiej (treści LinkedIn,
-   artykuły) — wyłącznie z materiału `shared-concept`, bez ujawniania danych `internal`.
+1. Rozstrzygnij (z argumentami) napięcie „repo publiczne vs `classification: internal`":
+   wariant A (tylko treść public-safe) czy B (split public showcase + private working vault)?
+   Jaki konkretny układ repo/branchy proponujesz dla wizytówki?
+2. Dla kodu (Terraform, Terragrunt, Ansible, Python, Go, CI/CD) — potwierdź lub zakwestionuj
+   rekomendację „osobne repo per projekt + evidence linkuje po SHA". Kiedy monorepo byłoby
+   jednak lepsze i jak wtedy poukładać path-filtered CI?
+3. Zaproponuj minimalny, ale „senior-grade" baseline CI/CD dla repo IaC (kolejność kroków,
+   security-scan, OIDC zamiast kluczy) — tak, by dało się go pokazać rekruterowi jako wzorzec.
+4. Jakie dowody (`05-evidence/`) uczynią repo kodu wiarygodnym dla rekrutera/audytora
+   (README, teardown, koszt, testy, badge) i jak spiąć je z notatkami vaulta bez dryfu?
+5. Wskaż słabe punkty i ryzyka tego modelu pracy z AI (bramka `llm_exposure`, izolacja domen,
+   publiczne repo) oraz co usprawnić bez osłabiania bezpieczeństwa danych.
 
 ## Po powrocie wyniku
 
@@ -146,14 +283,17 @@ pełny frontmatter), np. do `30-standards/` lub `50-patterns/`. Surowy wynik nie
 ## Raport skilla (wypisany operatorowi)
 
 ```
-Temat: vault platform-engineering-academy — zastosowania i możliwości
+Temat: vault platform-engineering-academy — zastosowania, możliwości + strategia kodu/repo (update 2026-07-15)
 Domena: shared-concept
 Źródła włączone (ciała notatek): 0
   - brak notatek allowed/allowed_anonymized na tym etapie (treść vaulta jest szablonowa)
+Wejścia niewrażliwe użyte: wymóg operatora (kod+repo, 2026-07-15); fakt strukturalny — brak kodu/IaC w repo
 Fakty strukturalne użyte (niewrażliwe): vault-manifest.yaml, lista katalogów, nazwy kontraktów i skilli
 Źródła pominięte: 7
   - README.md — brak frontmattera → forbidden (treść niecytowana)
   - _system/* — brak frontmattera → forbidden (treść niecytowana)
   - start-here / now / roadmap / theory — allowed_internal_only (narzędzie zewnętrzne)
-Metoda: oryginalna synteza frameworku jako konceptu shared-concept, bez cytowania ciał notatek gated.
+Dodano sekcje: nowy zakres (kod w portfolio), napięcie public-vs-internal, decyzja monorepo vs osobne repo,
+  kontrakt review (rubryka + skala seniority)
+Metoda: oryginalna synteza shared-concept + analiza senior reviewera, bez cytowania ciał notatek gated.
 ```
