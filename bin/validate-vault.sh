@@ -132,7 +132,7 @@ for f in $TARGETS; do
     if ! link_resolves "$target"; then
       err "$f — nierozwiązany wiki-link: [[$target]]"
     fi
-  done < <(grep -oE '\[\[[^]]+\]\]' "$f" 2>/dev/null | sed -E 's/^\[\[//; s/\]\]$//; s/\\//g; s/\|.*$//; s/#.*$//; s/[[:space:]]+$//')
+  done < <(awk '/^[[:space:]]*```/{fence=!fence; next} !fence' "$f" 2>/dev/null | sed 's/`[^`]*`//g' | grep -oE '\[\[[^]]+\]\]' | sed -E 's/^\[\[//; s/\]\]$//; s/\\//g; s/\|.*$//; s/#.*$//; s/[[:space:]]+$//')
 done
 
 # --- 4. Duplikaty identyfikatorów (zawsze w pełnym zakresie repo) ---
