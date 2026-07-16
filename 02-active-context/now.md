@@ -9,7 +9,7 @@ podcast_export: forbidden
 compliance_review: not_required
 source_of_truth: true
 created: 2026-07-12
-updated: 2026-07-12
+updated: 2026-07-16
 tags: [active-context, now]
 ---
 
@@ -37,3 +37,8 @@ Zaplanowany dowód: `ev-k8s-001` po labie kind/minikube.
 
 Odsłuchać podcast K8s 01, przerobić flashcards + quiz, wnioski własnymi słowami zapisać do
 `02-modules/kubernetes/theory.md`. Potem odcinek 02 (Deployment vs StatefulSet).
+
+> Uwaga (2026-07-16): sesja frameworkowa (domena `shared-concept`) — vault dostał strukturę na
+> uruchamialny kod labów (monorepo): standardy `30-standards/lab-*`, szablony, `bin/validate-vault.sh`,
+> CI (`.github/workflows/`), szkielet `03-labs/aws-eks-foundation/` (bez kodu). Kontekst nauki K8s
+> bez zmian. Otwarte: ADR-0002 (public vs internal) i inwentaryzacja notatek `internal`.

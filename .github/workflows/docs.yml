@@ -1,0 +1,64 @@
+name: docs
+
+# Waliduje TYLKO zmienione/nowe pliki Markdown (blocking).
+# Świadomie NIE lintuje całego historycznego korpusu — pełny skan to osobne zadanie
+# (patrz 30-standards/lab-code-standard.md, sekcja "CI/CD" oraz lista GAP w raporcie).
+on:
+  pull_request:
+    paths: ["**/*.md"]
+  push:
+    branches: [main]
+    paths: ["**/*.md"]
+
+permissions:
+  contents: read
+
+jobs:
+  changed-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (pełna historia — potrzebna do diffu bazy)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ustal zmienione pliki .md
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # base.sha jest obecny przy fetch-depth: 0 (nie zależy od ref origin/<base>)
+            range="${{ github.event.pull_request.base.sha }} HEAD"
+          else
+            before="${{ github.event.before }}"
+            if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+              range="HEAD~1 HEAD"
+            else
+              range="${before} HEAD"
+            fi
+          fi
+          # ACMR: dodane/skopiowane/zmodyfikowane/przeniesione (bez usuniętych)
+          files="$(git diff --name-only --diff-filter=ACMR $range -- '*.md' | tr '\n' ' ')"
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+          echo "Zmienione .md: ${files:-<brak>}"
+
+      - name: Setup Node (dla markdownlint-cli)
+        if: steps.changed.outputs.files != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: markdownlint (tylko zmienione, config lenient)
+        if: steps.changed.outputs.files != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx --yes markdownlint-cli@0.42.0 --config .markdownlint.yaml ${{ steps.changed.outputs.files }}
+
+      - name: Walidacja kontraktu vaulta (frontmatter, enumy, wiki-links, artefakty)
+        if: steps.changed.outputs.files != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash bin/validate-vault.sh ${{ steps.changed.outputs.files }}

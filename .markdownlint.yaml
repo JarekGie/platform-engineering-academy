@@ -1,0 +1,21 @@
+# Konfiguracja markdownlint (lenient, dopasowana do house-style vaulta).
+# Na tym etapie CI lintuje TYLKO zmienione/nowe pliki (patrz .github/workflows/docs.yml).
+# Pełny skan historycznego korpusu = osobne zadanie.
+default: true
+
+# --- Reguły wyłączone jako sprzeczne z długością/HTML notatek ---
+MD013: false   # line-length — notatki i tabele bywają szersze niż 80 kolumn
+MD033: false   # inline HTML — dopuszczone (np. <br>, znaczniki w tabelach)
+MD041: false   # pierwszy wiersz nagłówkiem — pliki zaczynają się frontmatterem YAML
+MD024:         # duplikaty nagłówków — tylko rodzeństwo (ADR-y powtarzają strukturę)
+  siblings_only: true
+MD029: false   # numeracja list uporządkowanych — nie wymuszaj stylu
+
+# --- Reguły odstępów wyłączone: vault pisany jest w stylu zwartym ---
+# (nagłówek bezpośrednio nad listą, diagramy w bare ``` itd.). Włączenie tych reguł
+# powodowałoby czerwone CI na każdym dotkniętym pliku historycznym.
+MD022: false   # blanks-around-headings
+MD031: false   # blanks-around-fences
+MD032: false   # blanks-around-lists
+MD040: false   # fenced-code-language (diagramy/outputy w bare ```)
+MD004: false   # ul-style (dopuszczamy - oraz + w listach)

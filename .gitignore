@@ -7,3 +7,74 @@
 
 # Audio pochodne z NotebookLM (regenerowalne, nie source of truth)
 *.mp3
+
+# =========================================================================
+# Kod labów — higiena publicznego repo (patrz 30-standards/public-lab-security-standard.md)
+# Reguła: żaden sekret, state, kubeconfig ani lokalny tfvars nie trafia do repo.
+# Pliki *.example, lockfile i manifesty zależności POZOSTAJĄ śledzone (są dowodem kompetencji).
+# =========================================================================
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# śledzone jawnie (dowód): .terraform.lock.hcl, *.tfvars.example, *.tfvars.json.example
+!*.tfvars.example
+!*.tfvars.json.example
+
+# --- Terragrunt ---
+.terragrunt-cache/
+
+# --- Kubernetes ---
+kubeconfig
+kubeconfig-*
+*.kubeconfig
+
+# --- Ansible ---
+*.retry
+.vault_pass
+.vault-pass
+vault-password
+vault-password.*
+# lokalne inventory z danymi wrażliwymi trzymaj poza repo; przykłady jako inventory.example.yml
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# --- Go ---
+/bin/*.test
+*.out
+coverage.out
+
+# --- Sekrety / dane wrażliwe (ogólne) ---
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.der
+
+# --- Lokalne pliki tymczasowe ---
+*.tmp
+*.log
+.DS_Store

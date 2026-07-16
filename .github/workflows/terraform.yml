@@ -1,0 +1,85 @@
+name: terraform
+
+# WZORZEC CI dla Terraform w monorepo. Uruchamia się tylko dla zmian w plikach .tf
+# i przetwarza wyłącznie KATALOGI, w których te pliki się zmieniły.
+# Świadomie BEZ: terraform plan, AWS credentials, apply. OIDC + plan = przyszły krok
+# (patrz 30-standards/lab-code-standard.md oraz public-lab-security-standard.md).
+# W pustym szkielecie (infra/terraform/ bez .tf) job nie wykona kroków Terraform.
+on:
+  pull_request:
+    paths: ["**.tf", "**/.tflint.hcl", ".github/workflows/terraform.yml"]
+  push:
+    branches: [main]
+    paths: ["**.tf", "**/.tflint.hcl", ".github/workflows/terraform.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ustal katalogi ze zmienionymi plikami .tf
+        id: dirs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            range="${{ github.event.pull_request.base.sha }} HEAD"
+          else
+            before="${{ github.event.before }}"
+            if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+              range="HEAD~1 HEAD"; else range="${before} HEAD"; fi
+          fi
+          dirs="$(git diff --name-only --diff-filter=ACMR $range -- '*.tf' \
+                  | xargs -r -n1 dirname | sort -u | tr '\n' ' ')"
+          echo "dirs=$dirs" >> "$GITHUB_OUTPUT"
+          if [ -z "$dirs" ]; then
+            echo "Brak zmienionych plików .tf — pomijam kroki Terraform."
+          else
+            echo "Katalogi do walidacji: $dirs"
+          fi
+
+      # Wersje narzędzi przypięte jawnie. Dostosuj do wersji używanej lokalnie
+      # przy pierwszym realnym kodzie Terraform (wtedy też dochodzi pre-commit).
+      - name: Setup Terraform
+        if: steps.dirs.outputs.dirs != ''
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Setup TFLint
+        if: steps.dirs.outputs.dirs != ''
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: "v0.53.0"
+
+      - name: fmt / init / validate / tflint (per katalog)
+        if: steps.dirs.outputs.dirs != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          fail=0
+          for d in ${{ steps.dirs.outputs.dirs }}; do
+            echo "::group::$d"
+            terraform -chdir="$d" fmt -check -recursive
+            terraform -chdir="$d" init -backend=false -input=false
+            terraform -chdir="$d" validate
+            ( cd "$d" && tflint --no-color ) || fail=1
+            echo "::endgroup::"
+          done
+          exit $fail
+
+      # Security scan (Checkov). Major tag przypięty; follow-up: pin do commit SHA.
+      - name: Checkov (security scan)
+        if: steps.dirs.outputs.dirs != ''
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          quiet: true
+          soft_fail: false
+          framework: terraform
