@@ -9,7 +9,7 @@ podcast_export: forbidden
 compliance_review: not_required
 source_of_truth: true
 created: 2026-07-12
-updated: 2026-07-12
+updated: 2026-07-16
 tags: [session-log, reference]
 ---
 
@@ -58,3 +58,30 @@ Nie usuwaj wpisów. Jeden wpis = jedna sesja = jedna domena.
   odcinki `generated-podcasts/kubernetes/kubernetes-02-pod/` i `kubernetes-02-workload-controllers/`.
 - Uwaga: pliki mp3 (~44 MB + ~37 MB) w `.gitignore` — regenerowalne z NotebookLM.
 - Branch / commit: `jgolab/2026-07-13` / `feat(learning): companion kursu K8s + odcinek 02 Pod`
+
+### 2026-07-16 — jgolab — domena: shared-concept (+ learning)
+
+- Zrobione:
+  - **Monorepo dla uruchamialnego kodu labów** (audyt read-only → plan → implementacja Faz 2–10):
+    - standardy [[lab-code-standard]], [[public-lab-security-standard]], [[lab-code-review-standard]];
+    - szablony laba katalogowego (`templates/lab-readme|evidence|architecture|lessons-learned|cost`)
+      + rozszerzony `templates/lab.md` (addytywnie, bez zmiany klasyfikacji);
+    - `bin/validate-vault.sh` (frontmatter/enumy/wiki-links/dup lab_id/artefakty) — naprawia
+      dangling ref z [[MANDATORY_WORKFLOW_CONTRACT]]; walidacja zmienionych plików: 0 błędów;
+    - CI path-filtered `.github/workflows/`: `docs` (tylko zmienione .md), `secret-scan`
+      (gitleaks, pełna historia), `terraform` (wzorzec, bez plan/apply/AWS);
+    - `.gitignore` (IaC/sekrety; `*.example` + lockfile śledzone), `.editorconfig`, `.markdownlint.yaml`;
+    - szkielet [[03-labs/aws-eks-foundation/lab|aws-eks-foundation]] — **bez kodu EKS**, Makefile bez atrap.
+  - **ADR-0002 (proponowana)** przez [[decision-note]]: napięcie publiczne repo vs `classification: internal`.
+  - Rozszerzony context-pack [[vault-zastosowania-i-mozliwosci]] (rola reviewera + strategia repo).
+  - Commit pending pre-generowanego podcastu `kubernetes-03-replicaset-skalowanie` z sesji 07-13.
+- Otwarte:
+  - Decyzja operatora do ADR-0002 + osobne zadanie: inwentaryzacja notatek `internal` (public-safe?).
+  - Weryfikacja przypiętych wersji narzędzi w CI; `pre-commit` z pierwszym realnym kodem Terraform.
+  - Baseline: 12 pre-existing dangling wiki-links w korpusie → osobne zadanie „pełny skan".
+  - Kontynuacja nauki K8s: odsłuchać backlog (02 Pod, 02-workload-controllers, 03 ReplicaSet).
+- Dotknięte notatki: [[now]], standardy `30-standards/`, szablony `templates/`, [[decision-log]],
+  `03-labs/aws-eks-foundation/`, [[vault-zastosowania-i-mozliwosci]], `README`, `.github/`, `bin/`.
+- Krok 9 (pre-generacja kolejnego podcastu): **pominięty** — istnieje backlog nieodsłuchanych
+  odcinków, a sesja była frameworkowa; nowe audio nieuzasadnione (zgłoszone operatorowi).
+- Branch / commit: `jgolab/2026-07-16` / `feat(framework): monorepo dla uruchamialnego kodu labów`

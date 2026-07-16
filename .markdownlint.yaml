@@ -1,0 +1,15 @@
+# Konfiguracja markdownlint (lenient). Na tym etapie CI lintuje TYLKO zmienione/nowe pliki
+# (patrz .github/workflows/docs.yml). Pełny skan historycznego korpusu = osobne zadanie.
+default: true
+
+# MD013 line-length — wyłączone: notatki i tabele bywają szersze niż 80 kolumn.
+MD013: false
+# MD033 inline HTML — dopuszczone (np. <br>, znaczniki w tabelach).
+MD033: false
+# MD041 pierwszy wiersz nagłówkiem — wiele notatek zaczyna się frontmatterem YAML.
+MD041: false
+# MD024 duplikaty nagłówków — tylko rodzeństwo (ADR-y powtarzają strukturę sekcji).
+MD024:
+  siblings_only: true
+# MD029 numeracja list uporządkowanych — nie wymuszaj stylu.
+MD029: false
